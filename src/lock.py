@@ -41,7 +41,6 @@ def lock(device_lock:dict):
             "command": "lock",
             "parameter":"default",
         }
-
     try:
         # ロック
         res = requests.post(devices_url, headers=headers,json=data)
@@ -58,7 +57,6 @@ def unlock(device_lock:dict):
             "command": "unlock",
             "parameter":"default",
         }
-
     try:
         # ロック
         res = requests.post(devices_url, headers=headers,json=data)
