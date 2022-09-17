@@ -58,7 +58,7 @@ def unlock(deviceId:str):
             "parameter":"default",
         }
     try:
-        # ロック
+        # アンロック
         res = requests.post(devices_url, headers=headers,json=data)
         res.raise_for_status()
         print(res.text)
