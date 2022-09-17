@@ -23,8 +23,8 @@ def read_lock_from_json(deviceListJson = '../deviceList.json') -> dict:
             device_lock = device
     return device_lock
 
-def get_lock_status(device_lock:dict):
-    devices_url = base_url + "/v1.1/devices/"+device_lock["deviceId"]+"/status"
+def get_lock_status(deviceId:str):
+    devices_url = base_url + "/v1.1/devices/"+deviceId+"/status"
     try:
         # ロックの状態を取得
         res = requests.get(devices_url, headers=headers)
@@ -34,8 +34,8 @@ def get_lock_status(device_lock:dict):
     except requests.exceptions.RequestException as e:
         print('response error:',e)
 
-def lock(device_lock:dict):
-    devices_url = base_url + "/v1.1/devices/"+device_lock["deviceId"]+"/commands"
+def lock(deviceId:str):
+    devices_url = base_url + "/v1.1/devices/"+deviceId+"/commands"
     data={
             "commandType": "command",
             "command": "lock",
@@ -50,8 +50,8 @@ def lock(device_lock:dict):
     except requests.exceptions.RequestException as e:
         print('response error:',e)
 
-def unlock(device_lock:dict):
-    devices_url = base_url + "/v1.1/devices/"+device_lock["deviceId"]+"/commands"
+def unlock(deviceId:str):
+    devices_url = base_url + "/v1.1/devices/"+deviceId+"/commands"
     data={
             "commandType": "command",
             "command": "unlock",
@@ -70,11 +70,13 @@ if __name__ == "__main__":
     utils.get_device_list()
     
     # ロックの状態を確認
-    lock_state = get_lock_status(read_lock_from_json())
+    device = read_lock_from_json()
+    deviceId = device["deviceId"]
+    lock_state = get_lock_status(deviceId)
     
     # ロックされているならアンロック、アンロックされているならロックする
     if lock_state == "unlocked":
-        lock(read_lock_from_json())
+        lock(deviceId)
     elif lock_state == "locked":
-        unlock(read_lock_from_json())
+        unlock(deviceId)
     
