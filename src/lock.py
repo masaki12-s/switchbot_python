@@ -30,7 +30,7 @@ def get_lock_status(device_lock:dict):
         res = requests.get(devices_url, headers=headers)
         res.raise_for_status()
         print(res.text)
-
+        print(res.json()["body"]["lockState"])
     except requests.exceptions.RequestException as e:
         print('response error:',e)
 
@@ -65,6 +65,16 @@ def unlock(device_lock:dict):
 
     except requests.exceptions.RequestException as e:
         print('response error:',e)
-
-lock(read_lock_from_json())
-get_lock_status(read_lock_from_json())
+if __name__ == "__main__":
+    # デバイス一覧を取得/更新
+    utils.get_device_list()
+    
+    # ロックの状態を確認
+    lock_state = get_lock_status(read_lock_from_json())
+    
+    # ロックされているならアンロック、アンロックされているならロックする
+    if lock_state == "unlocked":
+        lock(read_lock_from_json())
+    elif lock_state == "locked":
+        unlock(read_lock_from_json())
+    
