@@ -1,4 +1,4 @@
-import os,sys
+import os
 import time
 import hashlib
 import hmac
@@ -17,7 +17,17 @@ def make_sign(token:str,secret:str):
     sign = base64.b64encode(hmac.new(secret, msg=string_to_sign, digestmod=hashlib.sha256).digest())
     return sign,str(t),nonce
 
-def get_device_list(deviceListJson = 'deviceList.json'):
+def make_request_header(token:str,secret:str) -> dict:
+    sign,t,nonce = make_sign(token,secret)
+    headers={
+            "Authorization":token,
+            "sign":sign,
+            "t": str(t),
+            "nonce":nonce
+        }
+    return headers
+
+def get_device_list(deviceListJson = '../deviceList.json'):
     load_dotenv()
 
     # tokenとsecretを貼り付ける
@@ -26,14 +36,8 @@ def get_device_list(deviceListJson = 'deviceList.json'):
 
     devices_url = base_url + "/v1.1/devices"
 
-    sign,t,nonce = make_sign(token,secret)
-    
-    headers={
-            "Authorization":token,
-            "sign":sign,
-            "t": str(t),
-            "nonce":nonce
-        }
+    headers = make_request_header(token,secret)
+
     try:
         # APIでデバイスの取得を試みる
         res = requests.get(devices_url, headers=headers)
@@ -42,8 +46,8 @@ def get_device_list(deviceListJson = 'deviceList.json'):
         print(res.text)
         deviceList = json.loads(res.text)
         # 取得データをjsonファイルに書き込み
-        with open(deviceListJson, mode='wt', encoding='utf-8') as file:
-            json.dump(deviceList, file, ensure_ascii=False, indent=2)
+        with open(deviceListJson, mode='wt', encoding='utf-8') as f:
+            json.dump(deviceList, f, ensure_ascii=False, indent=2)
 
     except requests.exceptions.RequestException as e:
         print('response error:',e)
