@@ -12,7 +12,7 @@ token = os.getenv("TOKEN") # copy and paste from the SwitchBot app V6.14 or late
 secret = os.getenv("secret") # copy and paste from the SwitchBot app V6.14 or later
 headers = utils.make_request_header(token,secret)
 
-def read_lock_from_json(deviceListJson = '../deviceList.json') -> dict:
+def read_lock_from_json(deviceListJson='../deviceList.json') -> dict:
     lock = {}
     f = open(deviceListJson,"r",encoding="utf-8")
     jsonfile = json.load(f)

@@ -27,7 +27,7 @@ def make_request_header(token: str,secret: str) -> dict:
         }
     return headers
 
-def get_device_list(deviceListJson = '../deviceList.json'):
+def get_device_list(deviceListJson='../deviceList.json'):
     load_dotenv()
 
     # tokenとsecretを貼り付ける
