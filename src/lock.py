@@ -23,8 +23,8 @@ def read_lock_from_json(deviceListJson = '../deviceList.json') -> dict:
             device_lock = device
     return device_lock
 
-def get_lock_status(deviceId:str):
-    devices_url = base_url + "/v1.1/devices/"+deviceId+"/status"
+def get_lock_status(deviceId: str):
+    devices_url = base_url + "/v1.1/devices/" + deviceId + "/status"
     try:
         # ロックの状態を取得
         res = requests.get(devices_url, headers=headers)
@@ -34,32 +34,32 @@ def get_lock_status(deviceId:str):
     except requests.exceptions.RequestException as e:
         print('response error:',e)
 
-def lock(deviceId:str):
-    devices_url = base_url + "/v1.1/devices/"+deviceId+"/commands"
+def lock(deviceId: str):
+    devices_url = base_url + "/v1.1/devices/" + deviceId + "/commands"
     data={
             "commandType": "command",
             "command": "lock",
-            "parameter":"default",
+            "parameter": "default",
         }
     try:
         # ロック
-        res = requests.post(devices_url, headers=headers,json=data)
+        res = requests.post(devices_url, headers=headers, json=data)
         res.raise_for_status()
         print(res.text)
 
     except requests.exceptions.RequestException as e:
         print('response error:',e)
 
-def unlock(deviceId:str):
-    devices_url = base_url + "/v1.1/devices/"+deviceId+"/commands"
+def unlock(deviceId: str):
+    devices_url = base_url + "/v1.1/devices/" + deviceId + "/commands"
     data={
             "commandType": "command",
             "command": "unlock",
-            "parameter":"default",
+            "parameter": "default",
         }
     try:
         # アンロック
-        res = requests.post(devices_url, headers=headers,json=data)
+        res = requests.post(devices_url, headers=headers, json=data)
         res.raise_for_status()
         print(res.text)
         
